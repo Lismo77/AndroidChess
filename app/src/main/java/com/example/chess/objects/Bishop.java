@@ -1,4 +1,4 @@
-package objects;
+package com.example.chess.objects;
 
 /**
  * @author Liam Clarke and Manav Mistry

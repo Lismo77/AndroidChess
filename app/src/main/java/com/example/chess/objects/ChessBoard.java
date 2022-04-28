@@ -1,4 +1,4 @@
-package objects;
+package com.example.chess.objects;
 
 import java.util.ArrayList;
 
@@ -10,10 +10,10 @@ public class ChessBoard {
 
 	static String WHITE = "White";
 	static String BLACK = "Black";
-	Space board[][] = new Space[8][8];
-	ArrayList<Piece> whitePieces = new ArrayList<Piece>();
-	ArrayList<Piece> blackPieces = new ArrayList<Piece>();
-	String turn = WHITE;
+	public Space board[][] = new Space[8][8];
+	public ArrayList<Piece> whitePieces = new ArrayList<Piece>();
+	public ArrayList<Piece> blackPieces = new ArrayList<Piece>();
+	public String turn = WHITE;
 	
 	public ChessBoard(ChessBoard another) {
 		this.board = another.board;

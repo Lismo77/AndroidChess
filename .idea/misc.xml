@@ -3,7 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/lclar/AndroidStudioProjects/Chess/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/lclar/AndroidStudioProjects/Chess/app/src/main/res/drawable/button.xml" value="0.1" />
+        <entry key="..\:/Users/lclar/AndroidStudioProjects/Chess/app/src/main/res/drawable/filled_space.xml" value="0.1785" />
+        <entry key="..\:/Users/lclar/AndroidStudioProjects/Chess/app/src/main/res/drawable/white_space.xml" value="0.1785" />
+        <entry key="..\:/Users/lclar/AndroidStudioProjects/Chess/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/lclar/AndroidStudioProjects/Chess/app/src/main/res/layout/game_start.xml" value="0.22" />
       </map>
     </option>
   </component>

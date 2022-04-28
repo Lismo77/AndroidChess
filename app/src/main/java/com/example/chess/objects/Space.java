@@ -1,4 +1,4 @@
-package objects;
+package com.example.chess.objects;
 
 /**
  * @author Liam Clarke and Manav Mistry
@@ -6,10 +6,10 @@ package objects;
  *
  */
 public class Space {
-	int row;
-	char column;
-	boolean filled;
-	Piece piece;
+	public int row;
+	public char column;
+	public boolean filled;
+	public Piece piece;
 
 	public Space(int row, char column, boolean filled) {
 		this.row = row;

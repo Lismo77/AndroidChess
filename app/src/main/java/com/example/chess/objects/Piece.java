@@ -1,4 +1,4 @@
-package objects;
+package com.example.chess.objects;
 
 /**
  * @author Liam Clarke and Manav Mistry
@@ -7,10 +7,10 @@ package objects;
  */
 public abstract class Piece {
 	
-	String color;
-	String type;
-	Space space;
-	int moveCount;
+	public String color;
+	public String type;
+	public Space space;
+	public int moveCount;
 	
 	/**
 	 * @param color describes color of chess piece.

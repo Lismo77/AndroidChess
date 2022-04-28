@@ -1,4 +1,4 @@
-package objects;
+package com.example.chess.objects;
 
 import java.util.Scanner;
 
