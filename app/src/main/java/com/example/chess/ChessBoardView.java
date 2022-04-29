@@ -1,18 +1,23 @@
 package com.example.chess;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 
 import com.example.chess.objects.ChessBoard;
 import com.example.chess.objects.Piece;
+import com.example.chess.objects.Space;
 
 public class ChessBoardView extends View {
 
@@ -22,6 +27,11 @@ public class ChessBoardView extends View {
     private final Paint paint = new Paint();
 
     private int cellSize = getWidth()/8;
+
+    private ChessBoard gameBoard;
+    private Piece selectedPiece = null;
+    private Space[] currentMove = new Space[2];
+    public boolean gameOver = false;
 
     private Bitmap wpawn = BitmapFactory.decodeResource(getResources(), R.drawable.wpawn);
     private Bitmap wknight = BitmapFactory.decodeResource(getResources(), R.drawable.wknight);
@@ -38,6 +48,8 @@ public class ChessBoardView extends View {
 
     public ChessBoardView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+
+        gameBoard = new ChessBoard();
 
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ChessBoardView, 0, 0);
 
@@ -61,17 +73,65 @@ public class ChessBoardView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        paint.setAntiAlias(true);
-
-        ChessBoard cb = new ChessBoard();
-        drawSpaces(canvas, cb);
-        drawPieces(canvas, cb);
+        drawSpaces(canvas);
+        drawPieces(canvas);
     }
 
-    private void drawGameBoard(Canvas canvas) {
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x = event.getX();
+        float y = event.getY();
+
+        int action = event.getAction();
+
+        if (action == MotionEvent.ACTION_DOWN) {
+            if (!gameOver) {
+                int row = (int) Math.floor((y / cellSize));
+                int column = (int) Math.floor(x / cellSize);
+
+                if (currentMove[0] == null) {
+                    if (gameBoard.board[row][column].getPiece() != null) {
+                        if (gameBoard.board[row][column].getPiece().getColor() == gameBoard.turn) {
+                            selectedPiece = gameBoard.board[row][column].getPiece();
+                            currentMove[0] = gameBoard.board[row][column];
+                        }
+                    }
+                } else {
+                    if (gameBoard.board[row][column].getPiece() != null) {
+                        if (gameBoard.board[row][column].getPiece().getColor() == gameBoard.turn) {
+                            selectedPiece = gameBoard.board[row][column].getPiece();
+                            currentMove[0] = gameBoard.board[row][column];
+                        } else {
+                            currentMove[1] = gameBoard.board[row][column];
+                            if (gameBoard.attemptMove(currentMove) == 0) {
+                                gameOver = gameBoard.checkmate(gameBoard.turn);
+                                currentMove[0] = null;
+                                selectedPiece = null;
+                            }
+                            currentMove[1] = null;
+                        }
+                    } else {
+                        currentMove[1] = gameBoard.board[row][column];
+                        if (gameBoard.attemptMove(currentMove) == 0) {
+                            gameOver = gameBoard.checkmate(gameBoard.turn);
+                            currentMove[0] = null;
+                            selectedPiece = null;
+                        }
+                        currentMove[1] = null;
+                    }
+                }
+
+
+                invalidate();
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    private void drawSpaces(Canvas canvas, ChessBoard gameBoard) {
+    private void drawSpaces(Canvas canvas) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (gameBoard.board[i][j].isFilled()) {
@@ -84,7 +144,7 @@ public class ChessBoardView extends View {
         }
     }
 
-    private void drawPieces(Canvas canvas, ChessBoard gameBoard) {
+    private void drawPieces(Canvas canvas) {
         Bitmap wpawnres = Bitmap.createScaledBitmap(wpawn, (int)(cellSize*.85), (int)(cellSize*.85), true);
         Bitmap wknightres = Bitmap.createScaledBitmap(wknight, (int)(cellSize*.85), (int)(cellSize*.85), true);
         Bitmap wbishopres = Bitmap.createScaledBitmap(wbishop, (int)(cellSize*.85), (int)(cellSize*.85), true);
@@ -102,6 +162,10 @@ public class ChessBoardView extends View {
             for (int j = 0; j < 8; j++) {
                 if (gameBoard.board[i][j].getPiece() != null) {
                     Piece p = gameBoard.board[i][j].getPiece();
+                    if (p.equals(selectedPiece)) {
+                        paint.setColor(Color.GRAY);
+                        canvas.drawRect(j*cellSize,i*cellSize, (j+1)*cellSize, (i+1)*cellSize, paint);
+                    }
                     if (p.getColor().equals("White")) {
                         switch(p.getType()) {
                             case "pawn" :

@@ -396,6 +396,10 @@ public class ChessBoard {
 			}
 			boolean valid = pce.move(this, moveArr);
 			if (valid) {
+				if (this.turn == WHITE)
+					this.turn = BLACK;
+				else
+					this.turn = WHITE;
 				return 0;
 			} else
 				return -1;
