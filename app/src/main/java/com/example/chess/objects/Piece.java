@@ -1,5 +1,9 @@
 package com.example.chess.objects;
 
+import android.util.Log;
+
+import java.util.ArrayList;
+
 /**
  * @author Liam Clarke and Manav Mistry
  * Parent class for chess pieces.
@@ -87,12 +91,33 @@ public abstract class Piece {
 			for (int j = 0; j < 8; j++) {
 				testSpace[1] = gameBoard.board[i][j];
 				if (this.isValid(gameBoard, testSpace)) {
+					//Log.d("testinghm", this.toString());
 					return true;
 				}
 			}
 		}
 		return false;
 	}
+	public ArrayList<Space[]> getMoves(ChessBoard gameBoard) {
+		ArrayList<Space[]> validMoves = new ArrayList<Space[]>();
+		Space testSpace[] = new Space[2];
+		testSpace[0] = this.getSpace();
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				testSpace[1] = gameBoard.board[i][j];
+				if (this.isValid(gameBoard, testSpace)) {
+					Space[] move = new Space[2];
+					move[0] = testSpace[0];
+					move[1] = testSpace[1];
+					validMoves.add(move);
+				}
+			}
+		}
+		for (Space[] move : validMoves) {
+		}
+		return validMoves;
+	}
+
 	
 	public abstract boolean isValid(ChessBoard gameBoard, Space[] moveArr);
 

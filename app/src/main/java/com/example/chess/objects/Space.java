@@ -52,12 +52,7 @@ public class Space {
 
 	@Override
 	public String toString() {
-		if (this.getPiece() != null) {
-			return this.getPiece().toString();
-		} 
-		if (this.isFilled())
-			return "##";
-		return "  ";
+		return column + Integer.toString(row);
 	}
 	
 }

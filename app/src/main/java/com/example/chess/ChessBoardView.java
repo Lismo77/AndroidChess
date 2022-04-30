@@ -12,12 +12,16 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
 import com.example.chess.objects.ChessBoard;
 import com.example.chess.objects.Piece;
 import com.example.chess.objects.Space;
+
+import java.util.ArrayList;
 
 public class ChessBoardView extends View {
 
@@ -29,27 +33,43 @@ public class ChessBoardView extends View {
     private int cellSize = getWidth()/8;
 
     private ChessBoard gameBoard;
+    private ArrayList<ChessBoard> gameStates;
     private Piece selectedPiece = null;
-    private Space[] currentMove = new Space[2];
+    private final Space[] currentMove = new Space[2];
     public boolean gameOver = false;
+    public boolean resign = false;
+    public boolean draw = false;
+    public boolean undo = false;
 
-    private Bitmap wpawn = BitmapFactory.decodeResource(getResources(), R.drawable.wpawn);
-    private Bitmap wknight = BitmapFactory.decodeResource(getResources(), R.drawable.wknight);
-    private Bitmap wbishop = BitmapFactory.decodeResource(getResources(), R.drawable.wbishop);
-    private Bitmap wrook = BitmapFactory.decodeResource(getResources(), R.drawable.wrook);
-    private Bitmap wqueen = BitmapFactory.decodeResource(getResources(), R.drawable.wqueen);
-    private Bitmap wking = BitmapFactory.decodeResource(getResources(), R.drawable.wking);
-    private Bitmap bpawn = BitmapFactory.decodeResource(getResources(), R.drawable.bpawn);
-    private Bitmap bknight = BitmapFactory.decodeResource(getResources(), R.drawable.bknight);
-    private Bitmap bbishop = BitmapFactory.decodeResource(getResources(), R.drawable.bbishop);
-    private Bitmap brook = BitmapFactory.decodeResource(getResources(), R.drawable.brook);
-    private Bitmap bqueen = BitmapFactory.decodeResource(getResources(), R.drawable.bqueen);
-    private Bitmap bking = BitmapFactory.decodeResource(getResources(), R.drawable.bking);
+    private final Bitmap wpawn = BitmapFactory.decodeResource(getResources(), R.drawable.wpawn);
+    private final Bitmap wknight = BitmapFactory.decodeResource(getResources(), R.drawable.wknight);
+    private final Bitmap wbishop = BitmapFactory.decodeResource(getResources(), R.drawable.wbishop);
+    private final Bitmap wrook = BitmapFactory.decodeResource(getResources(), R.drawable.wrook);
+    private final Bitmap wqueen = BitmapFactory.decodeResource(getResources(), R.drawable.wqueen);
+    private final Bitmap wking = BitmapFactory.decodeResource(getResources(), R.drawable.wking);
+    private final Bitmap bpawn = BitmapFactory.decodeResource(getResources(), R.drawable.bpawn);
+    private final Bitmap bknight = BitmapFactory.decodeResource(getResources(), R.drawable.bknight);
+    private final Bitmap bbishop = BitmapFactory.decodeResource(getResources(), R.drawable.bbishop);
+    private final Bitmap brook = BitmapFactory.decodeResource(getResources(), R.drawable.brook);
+    private final Bitmap bqueen = BitmapFactory.decodeResource(getResources(), R.drawable.bqueen);
+    private final Bitmap bking = BitmapFactory.decodeResource(getResources(), R.drawable.bking);
+
+    private TextView gameStatus;
+    private Button playAgainButton;
+    private Button recordGameButton;
+    private Button homeButton;
+    private Button drawButton;
+    private Button resignButton;
+    private Button aiButton;
+    private Button undoButton;
+
 
     public ChessBoardView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
         gameBoard = new ChessBoard();
+        gameStates = new ArrayList<ChessBoard>();
+        //gameStates.add(new ChessBoard(gameBoard));
 
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ChessBoardView, 0, 0);
 
@@ -73,6 +93,24 @@ public class ChessBoardView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if (gameOver) {
+            gameStatus.setText(getOppositeTurn() + " wins!");
+            enableUpperButtons();
+            disableLowerButtons();
+            Log.d("testing", Integer.toString(gameStates.size()));
+        } else if (draw) {
+            gameStatus.setText("draw...");
+            enableUpperButtons();
+            disableLowerButtons();
+            gameOver = true;
+            Log.d("testing", Integer.toString(gameStates.size()));
+        } else if (resign) {
+            gameStatus.setText(getOppositeTurn() + " wins!");
+            enableUpperButtons();
+            disableLowerButtons();
+            gameOver = true;
+            Log.d("testing", Integer.toString(gameStates.size()));
+        }
         drawSpaces(canvas);
         drawPieces(canvas);
     }
@@ -92,20 +130,23 @@ public class ChessBoardView extends View {
 
                 if (currentMove[0] == null) {
                     if (gameBoard.board[row][column].getPiece() != null) {
-                        if (gameBoard.board[row][column].getPiece().getColor() == gameBoard.turn) {
+                        if (gameBoard.board[row][column].getPiece().getColor().equals(gameBoard.turn)) {
                             selectedPiece = gameBoard.board[row][column].getPiece();
                             currentMove[0] = gameBoard.board[row][column];
                         }
                     }
                 } else {
                     if (gameBoard.board[row][column].getPiece() != null) {
-                        if (gameBoard.board[row][column].getPiece().getColor() == gameBoard.turn) {
+                        if (gameBoard.board[row][column].getPiece().getColor().equals(gameBoard.turn)) {
                             selectedPiece = gameBoard.board[row][column].getPiece();
                             currentMove[0] = gameBoard.board[row][column];
                         } else {
                             currentMove[1] = gameBoard.board[row][column];
                             if (gameBoard.attemptMove(currentMove) == 0) {
-                                gameOver = gameBoard.checkmate(gameBoard.turn);
+                                undoButton.setEnabled(true);
+                                //gameStates.add(new ChessBoard(gameBoard));
+                                gameStatus.setText(gameBoard.turn + "'s turn");
+                                gameOver = gameBoard.checkmate(getOppositeTurn());
                                 currentMove[0] = null;
                                 selectedPiece = null;
                             }
@@ -114,7 +155,10 @@ public class ChessBoardView extends View {
                     } else {
                         currentMove[1] = gameBoard.board[row][column];
                         if (gameBoard.attemptMove(currentMove) == 0) {
-                            gameOver = gameBoard.checkmate(gameBoard.turn);
+                            undoButton.setEnabled(true);
+                            //gameStates.add(new ChessBoard(gameBoard));
+                            gameStatus.setText(gameBoard.turn + "'s turn");
+                            gameOver = gameBoard.checkmate(getOppositeTurn());
                             currentMove[0] = null;
                             selectedPiece = null;
                         }
@@ -212,5 +256,105 @@ public class ChessBoardView extends View {
                 }
             }
         }
+    }
+
+    public void resigned() {
+        resign = true;
+        invalidate();
+    }
+
+    public void drawn() {
+        draw = true;
+        invalidate();
+    }
+
+    public void undo() {
+        undoButton.setEnabled(false);
+        gameBoard = gameStates.get(gameStates.size() - 2);
+        gameStates.remove(gameStates.size() - 1);
+        invalidate();
+    }
+
+    public void setWidgets(TextView gs, Button pab, Button rgb, Button hb,
+                           Button db, Button rb, Button aib, Button ub) {
+        gameStatus = gs;
+        playAgainButton = pab;
+        recordGameButton = rgb;
+        homeButton = hb;
+        drawButton = db;
+        resignButton = rb;
+        aiButton = aib;
+        undoButton = ub;
+        gameStatus.setText(gameBoard.turn + "'s turn");
+        disableUpperButtons();
+    }
+
+    public void resetGame() {
+        gameOver = false;
+        draw = false;
+        resign = false;
+        gameBoard = new ChessBoard();
+        disableUpperButtons();
+        enableLowerButtons();
+        gameStatus.setText(gameBoard.turn + "'s turn");
+    }
+
+    public void randomMove() {
+        ArrayList<Space[]> possibleMoves = new ArrayList<Space[]>();
+        if (gameBoard.turn.equals("White")) {
+            for (Piece p : gameBoard.whitePieces) {
+                for (Space[] move : p.getMoves(gameBoard)) {
+                    possibleMoves.add(move);
+                }
+            }
+        } else {
+            for (Piece p : gameBoard.blackPieces) {
+                for (Space[] move : p.getMoves(gameBoard)) {
+                    possibleMoves.add(move);
+                }
+            }
+        }
+        int index = (int)(Math.random() * possibleMoves.size());
+        if (gameBoard.attemptMove(possibleMoves.get(index)) == 0) {
+            undoButton.setEnabled(true);
+            //gameStates.add(new ChessBoard(gameBoard));
+            gameStatus.setText(gameBoard.turn + "'s turn");
+            gameOver = gameBoard.checkmate(getOppositeTurn());
+            currentMove[0] = null;
+            selectedPiece = null;
+        }
+        invalidate();
+    }
+
+    private void enableUpperButtons() {
+        recordGameButton.setVisibility(View.VISIBLE);
+        playAgainButton.setVisibility(View.VISIBLE);
+        homeButton.setVisibility(View.VISIBLE);
+    }
+
+    private void enableLowerButtons() {
+        drawButton.setVisibility(View.VISIBLE);
+        resignButton.setVisibility(View.VISIBLE);
+        aiButton.setVisibility(View.VISIBLE);
+        undoButton.setVisibility(View.VISIBLE);
+    }
+
+    private void disableUpperButtons() {
+        recordGameButton.setVisibility(View.GONE);
+        playAgainButton.setVisibility(View.GONE);
+        homeButton.setVisibility(View.GONE);
+    }
+
+    private void disableLowerButtons() {
+        drawButton.setVisibility(View.GONE);
+        resignButton.setVisibility(View.GONE);
+        aiButton.setVisibility(View.GONE);
+        undoButton.setVisibility(View.GONE);
+    }
+
+    private String getOppositeTurn() {
+        if (gameBoard.turn.equals("White"))
+            return "Black";
+        else return "White";
     }
 }

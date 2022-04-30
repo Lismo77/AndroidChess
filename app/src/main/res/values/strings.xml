@@ -2,4 +2,13 @@
     <string name="app_name">Chess</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="play">Play</string>
+    <string name="game_playback">Game Playback</string>
+    <string name="draw">Draw</string>
+    <string name="resign">Resign</string>
+    <string name="ai">AI</string>
+    <string name="undo">Undo</string>
+    <string name="play_again">Play Again</string>
+    <string name="record_game">Record Game</string>
+    <string name="home">Home</string>
+
 </resources>

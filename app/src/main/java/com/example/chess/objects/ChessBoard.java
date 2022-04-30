@@ -1,5 +1,7 @@
 package com.example.chess.objects;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 /**
@@ -11,14 +13,15 @@ public class ChessBoard {
 	static String WHITE = "White";
 	static String BLACK = "Black";
 	public Space board[][] = new Space[8][8];
-	public ArrayList<Piece> whitePieces = new ArrayList<Piece>();
-	public ArrayList<Piece> blackPieces = new ArrayList<Piece>();
+	public ArrayList<Piece> whitePieces = new ArrayList<>();
+	public ArrayList<Piece> blackPieces = new ArrayList<>();
 	public String turn = WHITE;
 	
 	public ChessBoard(ChessBoard another) {
 		this.board = another.board;
 		this.whitePieces = another.whitePieces;
 		this.blackPieces = another.blackPieces;
+		this.turn = another.turn;
 	}
 	
 	/**
@@ -119,7 +122,7 @@ public class ChessBoard {
 					case 1 : 
 						newPiece = new Knight(clr, board[i][j]);
 						break;
-					case 2 : 
+					case 2 :
 						newPiece = new Bishop(clr, board[i][j]);
 						break;
 					case 3 : 
@@ -128,10 +131,10 @@ public class ChessBoard {
 					case 4 : 
 						newPiece = new King(clr, board[i][j]);
 						break;
-					case 5 : 
+					case 5 :
 						newPiece = new Bishop(clr, board[i][j]);
 						break;
-					case 6 : 
+					case 6 :
 						newPiece = new Knight(clr, board[i][j]);
 						break;
 					case 7 : 
@@ -151,7 +154,7 @@ public class ChessBoard {
 	 */
 	public boolean kingCheck(String color) {
 		Piece king = null;
-		String enemyColor = "";
+		String enemyColor;
 		if (color == BLACK) {
 			enemyColor = WHITE;
 		} else {

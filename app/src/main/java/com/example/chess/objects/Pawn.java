@@ -1,5 +1,7 @@
 package com.example.chess.objects;
 
+import android.util.Log;
+
 /**
  * @author Liam Clarke and Manav Mistry
  * King piece, extends Piece abstract class.
@@ -52,8 +54,9 @@ public class Pawn extends Piece {
 				}
 				Piece temp = null;
 				if (moveArr[1].getPiece() != null) {
-					if (moveArr[1].getPiece().getColor().equals(this.getColor()))
+					if (moveArr[1].getPiece().getColor().equals(this.getColor())) {
 						return false;
+					}
 					temp = moveArr[1].getPiece();
 				}
 				moveArr[0].setPiece(null);
