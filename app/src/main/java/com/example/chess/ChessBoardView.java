@@ -372,4 +372,9 @@ public class ChessBoardView extends View {
         gameBoard = gameStates.get(gameStates.size() - 1);
         invalidate();
     }
+    public String getDate(){
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        return formatter.format(date);
+    }
 }
