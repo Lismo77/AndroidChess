@@ -21,6 +21,8 @@ public class GameStart extends AppCompatActivity {
     private Button resignButton;
     private Button aiButton;
     private Button undoButton;
+    private Button forwardButton;
+    private Button backwardButton;
 
 
     @Override
@@ -38,6 +40,8 @@ public class GameStart extends AppCompatActivity {
         aiButton = (Button) findViewById(R.id.aiButton);
         undoButton = (Button) findViewById(R.id.undoButton);
         undoButton.setEnabled(false);
+        forwardButton = (Button) findViewById(R.id.forwardGameButton);
+        backwardButton = (Button) findViewById(R.id.backwardGameButton);
         cbv.setWidgets(gameStatus, playAgainButton, recordGameButton, homeButton, drawButton, resignButton, aiButton, undoButton);
 
     }
@@ -67,5 +71,11 @@ public class GameStart extends AppCompatActivity {
     public void aiButtonClicked(View v) {
         cbv.randomMove();
     }
+    
+     public void forwardButtonClicked(View v) {
+        cbv.forward();
+    }
+
+    public void forwardButtonClicked(View v) { cbv.backward(); }
 
 }
