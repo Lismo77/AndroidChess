@@ -148,6 +148,45 @@ public class ChessBoard {
 		}
 	}
 
+	public ChessBoard clone() {
+		ChessBoard clone = new ChessBoard();
+		ChessBoard thisBoard = this;
+
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (thisBoard.board[i][j].getPiece() == null)
+					clone.board[i][j].setPiece(null);
+				else {
+					Piece thisPiece = thisBoard.board[i][j].getPiece();
+					String clr = thisPiece.getColor();
+					String type = thisPiece.getType();
+					switch(type) {
+						case "pawn" :
+							clone.board[i][j].setPiece(new Pawn(clr, clone.board[i][j]));
+							break;
+						case "knight" :
+							clone.board[i][j].setPiece(new Knight(clr, clone.board[i][j]));
+							break;
+						case "bishop" :
+							clone.board[i][j].setPiece(new Bishop(clr, clone.board[i][j]));
+							break;
+						case "rook" :
+							clone.board[i][j].setPiece(new Rook(clr, clone.board[i][j]));
+							break;
+						case "queen" :
+							clone.board[i][j].setPiece(new Queen(clr, clone.board[i][j]));
+							break;
+						case "king" :
+							clone.board[i][j].setPiece(new King(clr, clone.board[i][j]));
+							break;
+					}
+				}
+			}
+		}
+
+		return clone;
+	}
+
 	/**
 	 * @param color
 	 * @return boolean value for whether or not the king is in check

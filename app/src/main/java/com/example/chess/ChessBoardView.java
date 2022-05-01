@@ -69,7 +69,7 @@ public class ChessBoardView extends View {
 
         gameBoard = new ChessBoard();
         gameStates = new ArrayList<ChessBoard>();
-        //gameStates.add(new ChessBoard(gameBoard));
+        gameStates.add(gameBoard.clone());
 
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ChessBoardView, 0, 0);
 
@@ -144,7 +144,7 @@ public class ChessBoardView extends View {
                             currentMove[1] = gameBoard.board[row][column];
                             if (gameBoard.attemptMove(currentMove) == 0) {
                                 undoButton.setEnabled(true);
-                                //gameStates.add(new ChessBoard(gameBoard));
+                                gameStates.add(gameBoard.clone());
                                 gameStatus.setText(gameBoard.turn + "'s turn");
                                 gameOver = gameBoard.checkmate(getOppositeTurn());
                                 currentMove[0] = null;
@@ -156,7 +156,7 @@ public class ChessBoardView extends View {
                         currentMove[1] = gameBoard.board[row][column];
                         if (gameBoard.attemptMove(currentMove) == 0) {
                             undoButton.setEnabled(true);
-                            //gameStates.add(new ChessBoard(gameBoard));
+                            gameStates.add(gameBoard.clone());
                             gameStatus.setText(gameBoard.turn + "'s turn");
                             gameOver = gameBoard.checkmate(getOppositeTurn());
                             currentMove[0] = null;
