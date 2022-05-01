@@ -62,6 +62,8 @@ public class ChessBoardView extends View {
     private Button resignButton;
     private Button aiButton;
     private Button undoButton;
+    private Button forwardButton;
+    private Button backwardButton;
 
 
     public ChessBoardView(Context context, @Nullable AttributeSet attrs) {
@@ -277,7 +279,7 @@ public class ChessBoardView extends View {
     }
 
     public void setWidgets(TextView gs, Button pab, Button rgb, Button hb,
-                           Button db, Button rb, Button aib, Button ub) {
+                           Button db, Button rb, Button aib, Button ub, Button fb,Button bb) {
         gameStatus = gs;
         playAgainButton = pab;
         recordGameButton = rgb;
@@ -286,6 +288,8 @@ public class ChessBoardView extends View {
         resignButton = rb;
         aiButton = aib;
         undoButton = ub;
+        forwardButton = fb;
+        backwardButton = bb;
         gameStatus.setText(gameBoard.turn + "'s turn");
         disableUpperButtons();
     }
@@ -358,5 +362,14 @@ public class ChessBoardView extends View {
         if (gameBoard.turn.equals("White"))
             return "Black";
         else return "White";
+    }
+     private void forward() {
+        gameBoard = gameStates.get(gameStates.size() + 1);
+        invalidate();
+    }
+
+    private void backward() {
+        gameBoard = gameStates.get(gameStates.size() - 1);
+        invalidate();
     }
 }
