@@ -272,6 +272,7 @@ public class ChessBoardView extends View {
         undoButton.setEnabled(false);
         gameBoard = gameStates.get(gameStates.size() - 2);
         gameStates.remove(gameStates.size() - 1);
+        gameStatus.setText(gameBoard.turn + "'s turn");
         invalidate();
     }
 
@@ -294,6 +295,7 @@ public class ChessBoardView extends View {
         draw = false;
         resign = false;
         gameBoard = new ChessBoard();
+        gameStates = new ArrayList<ChessBoard>();
         disableUpperButtons();
         enableLowerButtons();
         gameStatus.setText(gameBoard.turn + "'s turn");
@@ -317,7 +319,7 @@ public class ChessBoardView extends View {
         int index = (int)(Math.random() * possibleMoves.size());
         if (gameBoard.attemptMove(possibleMoves.get(index)) == 0) {
             undoButton.setEnabled(true);
-            //gameStates.add(new ChessBoard(gameBoard));
+            gameStates.add(gameBoard.clone());
             gameStatus.setText(gameBoard.turn + "'s turn");
             gameOver = gameBoard.checkmate(getOppositeTurn());
             currentMove[0] = null;

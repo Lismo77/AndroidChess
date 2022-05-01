@@ -151,11 +151,19 @@ public class ChessBoard {
 	public ChessBoard clone() {
 		ChessBoard clone = new ChessBoard();
 		ChessBoard thisBoard = this;
+		clone.turn = thisBoard.turn;
 
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				if (thisBoard.board[i][j].getPiece() == null)
+				if (thisBoard.board[i][j].getPiece() == null) {
+					if (clone.board[i][j].getPiece() != null) {
+						if (clone.board[i][j].getPiece().getColor().equals("White"))
+							clone.whitePieces.remove(clone.board[i][j].getPiece());
+						else
+							clone.blackPieces.remove(clone.board[i][j].getPiece());
+					}
 					clone.board[i][j].setPiece(null);
+				}
 				else {
 					Piece thisPiece = thisBoard.board[i][j].getPiece();
 					String clr = thisPiece.getColor();
@@ -180,6 +188,11 @@ public class ChessBoard {
 							clone.board[i][j].setPiece(new King(clr, clone.board[i][j]));
 							break;
 					}
+					clone.board[i][j].getPiece().setSpace(clone.board[i][j]);
+					if (clr.equals("White"))
+						clone.whitePieces.add(clone.board[i][j].getPiece());
+					else
+						clone.blackPieces.add(clone.board[i][j].getPiece());
 				}
 			}
 		}
