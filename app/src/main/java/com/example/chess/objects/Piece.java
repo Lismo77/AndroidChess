@@ -91,7 +91,6 @@ public abstract class Piece {
 			for (int j = 0; j < 8; j++) {
 				testSpace[1] = gameBoard.board[i][j];
 				if (this.isValid(gameBoard, testSpace)) {
-					//Log.d("testinghm", this.toString());
 					return true;
 				}
 			}

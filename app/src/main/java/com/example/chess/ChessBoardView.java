@@ -21,7 +21,9 @@ import com.example.chess.objects.ChessBoard;
 import com.example.chess.objects.Piece;
 import com.example.chess.objects.Space;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ChessBoardView extends View {
 
@@ -40,6 +42,7 @@ public class ChessBoardView extends View {
     public boolean resign = false;
     public boolean draw = false;
     public boolean undo = false;
+    public boolean playback = false;
 
     private final Bitmap wpawn = BitmapFactory.decodeResource(getResources(), R.drawable.wpawn);
     private final Bitmap wknight = BitmapFactory.decodeResource(getResources(), R.drawable.wknight);
@@ -99,19 +102,16 @@ public class ChessBoardView extends View {
             gameStatus.setText(getOppositeTurn() + " wins!");
             enableUpperButtons();
             disableLowerButtons();
-            Log.d("testing", Integer.toString(gameStates.size()));
         } else if (draw) {
             gameStatus.setText("draw...");
             enableUpperButtons();
             disableLowerButtons();
             gameOver = true;
-            Log.d("testing", Integer.toString(gameStates.size()));
         } else if (resign) {
             gameStatus.setText(getOppositeTurn() + " wins!");
             enableUpperButtons();
             disableLowerButtons();
             gameOver = true;
-            Log.d("testing", Integer.toString(gameStates.size()));
         }
         drawSpaces(canvas);
         drawPieces(canvas);
@@ -279,7 +279,7 @@ public class ChessBoardView extends View {
     }
 
     public void setWidgets(TextView gs, Button pab, Button rgb, Button hb,
-                           Button db, Button rb, Button aib, Button ub, Button fb,Button bb) {
+                           Button db, Button rb, Button aib, Button ub) {
         gameStatus = gs;
         playAgainButton = pab;
         recordGameButton = rgb;
@@ -288,11 +288,19 @@ public class ChessBoardView extends View {
         resignButton = rb;
         aiButton = aib;
         undoButton = ub;
+        gameStatus.setText(gameBoard.turn + "'s turn");
+        disableUpperButtons();
+    }
+
+    public void setPlaybackWidgets(TextView gs, Button hb, Button fb,Button bb) {
+        gameStatus = gs;
+        homeButton = hb;
         forwardButton = fb;
         backwardButton = bb;
         gameStatus.setText(gameBoard.turn + "'s turn");
         disableUpperButtons();
     }
+
 
     public void resetGame() {
         gameOver = false;
@@ -363,13 +371,29 @@ public class ChessBoardView extends View {
             return "Black";
         else return "White";
     }
-     private void forward() {
-        gameBoard = gameStates.get(gameStates.size() + 1);
+
+    public void setPlayback(ArrayList<ChessBoard> gs) {
+        gameStates = gs;
+        gameBoard = gameStates.get(0);
+        backwardButton.setEnabled(false);
+        if (gameStates.size() <= 1) {
+            forwardButton.setEnabled(false);
+        }
+    }
+
+     public void forward() {
+        gameBoard = gameStates.get(gameStates.indexOf(gameBoard) + 1);
+        backwardButton.setEnabled(true);
+         if (gameStates.indexOf(gameBoard) + 1 >= gameStates.size())
+             forwardButton.setEnabled(false);
         invalidate();
     }
 
-    private void backward() {
-        gameBoard = gameStates.get(gameStates.size() - 1);
+    public void backward() {
+        gameBoard = gameStates.get(gameStates.indexOf(gameBoard) - 1);
+        forwardButton.setEnabled(true);
+        if (gameStates.indexOf(gameBoard) == 0)
+            backwardButton.setEnabled(false);
         invalidate();
     }
     public String getDate(){

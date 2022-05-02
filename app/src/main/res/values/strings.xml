@@ -3,6 +3,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="play">Play</string>
     <string name="game_playback">Game Playback</string>
+    <string name="forward">Forward</string>
+    <string name="backward">Backward</string>
     <string name="draw">Draw</string>
     <string name="resign">Resign</string>
     <string name="ai">AI</string>

@@ -27,7 +27,7 @@
         android:layout_height="100dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/button"
-        android:onClick="playButtonClicked"
+        android:onClick="gamePlaybackClicked"
         android:text="@string/game_playback"
         android:textSize="30sp"
         android:textStyle="bold"
