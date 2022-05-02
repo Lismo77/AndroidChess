@@ -28,18 +28,14 @@ public class GamePlayback extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_playback);
 
-        Log.d("testing", "36");
+        gameStates = new ArrayList<>();
         gameStates.add(new ChessBoard());
-        Log.d("testing", "37");
-
         cbv = (ChessBoardView) findViewById(R.id.chess_board_view);
         gameStatus = (TextView) findViewById(R.id.gameStatus);
         homeButton = (Button) findViewById(R.id.homeButton);
         backButton = (Button) findViewById(R.id.backwardGameButton);
         forwardButton = (Button) findViewById(R.id.forwardGameButton);
-        Log.d("testing", "38");
         cbv.setPlayback(gameStates);
-        Log.d("testing", "39");
         cbv.setPlaybackWidgets(gameStatus, homeButton, backButton, forwardButton);
 
 
