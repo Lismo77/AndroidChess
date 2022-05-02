@@ -2,18 +2,26 @@ package com.example.chess.objects;
 
 import java.util.ArrayList;
 
-public class storage {
-    private ArrayList <ArrayList<ChessBoard>> prevGames;
+public class gameStorage {
 
-    public storage(ArrayList prevGames){
-        prevGames = new ArrayList<ArrayList<ChessBoard>>();
+    private static ArrayList<ArrayList> prevGames;
+    //private ArrayList <ArrayList<ChessBoard>> prevGames;
+
+    public gameStorage(){
+        prevGames = new ArrayList<>();
     }
 
-    private void store(ArrayList gameStates){
+    public static void store(ArrayList gameStates){
         prevGames.add(gameStates);
     }
     public ArrayList getStorage(){
-        return prevGames;
+        return (ArrayList) prevGames;
     }
 
+    public ArrayList forward(ArrayList gameStates) {
+        return prevGames.get(prevGames.indexOf(gameStates) + 1);
+    }
+    public ArrayList backward(ArrayList gameStates) {
+        return prevGames.get(prevGames.indexOf(gameStates) - 1);
+    }
 }
