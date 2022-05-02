@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 public class gameStorage {
 
-    private static ArrayList<ArrayList> prevGames;
-    //private ArrayList <ArrayList<ChessBoard>> prevGames;
+    private static ArrayList<ArrayList<ChessBoard>> prevGames;
 
     public gameStorage(){
         prevGames = new ArrayList<>();
